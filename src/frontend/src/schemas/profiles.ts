@@ -9,6 +9,20 @@ export enum Country {
   Rwanda = "rwanda",
 }
 
+const developerInfoSchema = z.object({
+  skills: z.array(z.string()).optional(),
+  assessmentScore: z.number().optional(),
+  experience: z.number().optional(),
+  githubProfile: z.string().optional(),
+  portfolioUrl: z.string().optional(),
+  bio: z.string().optional(),
+  education: z.string().optional(),
+  reputationScore: z.number().optional(),
+  completedProjects: z.number().optional(),
+  successfulHires: z.number().optional(),
+  level: z.string().optional(),
+});
+
 export const profileSchema = z.object({
   firstName: z
     .string({ required_error: "First name is required" })
@@ -45,6 +59,21 @@ export const profileSchema = z.object({
     .string({ required_error: "Description is required" })
     .min(10, { message: "Description must be at least 10 characters" })
     .max(500, { message: "Description must not exceed 500 characters" }),
+  developerInfo: developerInfoSchema.optional(),
 });
 
 export type IcreateProfile = z.infer<typeof profileSchema>;
+
+export type DeveloperInfo = {
+  skills: string[];
+  assessmentScore: number;
+  experience: number;
+  githubProfile?: string;
+  portfolioUrl?: string;
+  bio?: string;
+  education?: string;
+  reputationScore: number;
+  completedProjects: number;
+  successfulHires: number;
+  level: string;
+};

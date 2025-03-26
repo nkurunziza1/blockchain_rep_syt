@@ -1,18 +1,21 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { ISignIn } from "../../schemas/user.schema";
+import { UserRole } from "@/src/backend/types/types";
 
 interface LoginResponse {
-  sessionId: string;
   userId: string;
-  role: string;
+  email: string;
+  password: string;
+  role: UserRole;
+  sessionId: string;
   firstName: string;
   lastName: string;
-  message: string;
   phone: string;
-  email: string;
-  regNumber: string;
+  message: string;
 }
+
+
 
 export const loginUser = async (
   formData: ISignIn
@@ -40,7 +43,6 @@ export const loginUser = async (
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
-        regNumber: data.regNumber,
       })
     );
 
