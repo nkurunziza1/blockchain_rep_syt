@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import Input from "../../appUi/components/forms/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -8,13 +10,13 @@ import { getStoredUserData, loginUser } from "../../api/signin";
 import Button from "../../appUi/components/forms/Button";
 import Heading from "../../appUi/components/ui/Heading";
 import { useAuth } from "../../context/AuthContext";
-import toast from "react-hot-toast";
-import { checkExitsProfile } from "../../utils/checkExistProfile";
 import { getProfile } from "../../api/profiles";
+
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -27,26 +29,24 @@ const Login = () => {
   const onSubmit = async (data: ISignIn) => {
     setIsLoading(true);
     try {
-
       const loginResponse = await loginUser(data);
 
       if (loginResponse && loginResponse.sessionId) {
         login(btoa(JSON.stringify(loginResponse)));
-
         try {
           const profile = await getProfile();
           if (profile) {
             const userData = getStoredUserData();
-            const profileUrl = `/profile/${userData.lastName}-${userData.firstName}`.toLowerCase();
+            const profileUrl =
+              `/profile/${userData.lastName}-${userData.firstName}`.toLowerCase();
             navigate(profileUrl);
           }
         } catch (error: any) {
-          console.log(error.response.data.message);
+          console.log("error+++++++++++", error);
           const checkProfileNotFound = error.response.data.message;
           if (checkProfileNotFound === "Profile not found") {
-            navigate('/profile/create');
+            navigate("/profile/create");
           }
-
         }
       }
     } catch (error) {
@@ -80,14 +80,15 @@ const Login = () => {
         <Button
           loadingText="Signing in..."
           isLoading={isLoading}
-          className={`${isLoading ? "bg-white" : "bg-largeTextColor"
-            } text-white`}
+          className={`${
+            isLoading ? "bg-white" : "bg-largeTextColor"
+          } text-white`}
         >
           Sign in
         </Button>
         <div className="pt-10">
           <p className="text-sm">
-            By creating an account, you agree to E-portfolio's <br></br>
+            By creating an account, you agree to F-reputation's <br></br>
             <a
               href="/"
               className="underline text-primaryBlueColor font-normal text-sm"

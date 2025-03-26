@@ -1,9 +1,8 @@
 import * as z from "zod";
 import Roles from "../types/users/user";
 export enum Role {
-  Student = "student",
-  Teacher = "teacher",
-  Admin = "admin",
+  Developer = "developer",
+  Recruiter = "recruiter",
 }
 export const loginSchema = z.object({
   email: z
@@ -40,9 +39,11 @@ export const signupSchema = z
     lastName: z.string({
       required_error: "Last name is required",
     }),
-    regNumber: z.string({
-      required_error: "Registration number is required",
-    }),
+    email: z
+      .string({
+        required_error: "Email is required",
+      })
+      .email(),
     phone: z.string({
       required_error: "Phone number is required",
     }),
